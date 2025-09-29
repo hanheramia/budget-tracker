@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaymentService, CreditCardPayment } from '../payment.service';
+import { PaymentService, CreditCardPayment } from '../services/payment.service';
 import { PaymentListComponent } from "../payment-list/payment-list";
 
 @Component({

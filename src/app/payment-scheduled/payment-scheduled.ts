@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { PaymentService, CreditCardPayment } from '../payment.service';
+import { PaymentService, CreditCardPayment } from '../services/payment.service';
 
 @Component({
   selector: 'payment-scheduled',

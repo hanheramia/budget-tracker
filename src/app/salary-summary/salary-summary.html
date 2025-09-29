@@ -1,0 +1,55 @@
+<h3>Salary Summary - Payments Due on 15th</h3>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th *ngFor="let month of months">{{ month }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let type of ['Salary','Bonus']">
+      <td>{{ type }}</td>
+      <td *ngFor="let month of months">
+        {{
+          getTotalForTypeMonth(type, month, '15') 
+            ? (getTotalForTypeMonth(type, month, '15') | number:'1.2-2') 
+            : '-'
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td *ngFor="let month of months">
+        <strong>{{ getTotalMonth(month, '15') | number:'1.2-2' }}</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Salary Summary - Payments Due on 30th</h3>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th *ngFor="let month of months">{{ month }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let type of ['Salary','Bonus']">
+      <td>{{ type }}</td>
+      <td *ngFor="let month of months">
+        {{
+          getTotalForTypeMonth(type, month, '30') 
+            ? (getTotalForTypeMonth(type, month, '30') | number:'1.2-2') 
+            : '-'
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td *ngFor="let month of months">
+        <strong>{{ getTotalMonth(month, '30') | number:'1.2-2' }}</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>

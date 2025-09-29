@@ -1,0 +1,74 @@
+<h2>Add Salary / Bonus</h2>
+
+<form (ngSubmit)="addSalary()">
+  <label>
+    Type:
+    <select [(ngModel)]="newSalary.type" name="type">
+      <option value="Salary">Salary</option>
+      <option value="Bonus">Bonus</option>
+    </select>
+  </label>
+  <br />
+
+  <label>
+    Description:
+    <input type="text" [(ngModel)]="newSalary.description" name="description" />
+  </label>
+  <br />
+
+  <label>
+    Amount:
+    <input type="number" [(ngModel)]="newSalary.amount" name="amount" step="0.01" required />
+  </label>
+  <br />
+
+  <label>
+    Months:
+    <input type="number" [(ngModel)]="newSalary.months" name="months" min="1" required />
+  </label>
+  <br />
+
+  <label>
+    Start Month:
+    <input type="month" [(ngModel)]="newSalary.startMonth" name="startMonth" required />
+  </label>
+  <br />
+
+  <label>
+    Due Date:
+    <select [(ngModel)]="newSalary.dueDate" name="dueDate">
+      <option value="15">15th</option>
+      <option value="30">30th</option>
+    </select>
+  </label>
+  <br />
+
+  <button type="submit">Add</button>
+  <button type="button" (click)="clearAll()">Clear All</button>
+</form>
+
+<hr />
+
+<h3>Salary Schedule</h3>
+<div *ngIf="salaryService.salaries$ | async as salaries; else noSalary">
+  <div *ngFor="let s of salaries">
+    <p>
+      Type: {{ s.type }} |
+      Description: {{ s.description }} |
+      Amount: {{ s.amount | number:'1.2-2' }} |
+      Months: {{ s.months }} |
+      Start Month: {{ s.startMonth }} |
+      Due Date: {{ s.dueDate }}
+      <button type="button" (click)="removeSalary(s)">Remove</button>
+    </p>
+    <ul>
+      <li *ngFor="let m of getMonths(s)">
+        {{ m }}: {{ s.perMonthAmount | number:'1.2-2' }}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #noSalary>
+  <p>No salary or bonus entries yet.</p>
+</ng-template>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { PaymentService, CreditCardPayment } from '../payment.service';
-import { GroupByCardPipe } from '../group-by-card.pipe';
+import { PaymentService, CreditCardPayment } from '../services/payment.service';
+import { GroupByCardPipe } from '../services/group-by-card.pipe';
 
 @Component({
   selector: 'payment-list',
