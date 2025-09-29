@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 export interface CreditCardPayment {
+  expenseType: 'card' | 'utility',
   cardName: string;
   dueDate: '15' | '30';
   type: 'BNPL' | 'Straight' | 'Installment';
@@ -12,6 +13,7 @@ export interface CreditCardPayment {
   firstPaymentDate?: string;
   lastPaymentDate?: string;
   perMonthAmount?: number;
+  description?: string;
 }
 
 @Injectable({

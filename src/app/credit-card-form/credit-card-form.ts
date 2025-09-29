@@ -7,12 +7,13 @@ import { PaymentListComponent } from "../payment-list/payment-list";
 @Component({
   selector: 'app-credit-card-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaymentListComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './credit-card-form.html',
   styleUrls: ['./credit-card-form.css'],
 })
 export class CreditCardFormComponent {
   newPayment: CreditCardPayment = {
+    expenseType: 'card',
     cardName: '',
     dueDate: '15',
     type: 'Straight',
@@ -30,6 +31,7 @@ export class CreditCardFormComponent {
     const payment: CreditCardPayment = { ...this.newPayment };
 
     const { first, last } = this.calculatePaymentDates(
+      payment.expenseType,
       payment.startMonth,
       payment.dueDate,
       payment.type,
@@ -40,7 +42,7 @@ export class CreditCardFormComponent {
     payment.firstPaymentDate = first;
     payment.lastPaymentDate = last;
 
-    if (payment.type === 'Straight') {
+    if (payment.type === 'Straight' || payment.expenseType === 'utility') {
       payment.perMonthAmount = payment.amount;
     } else if ((payment.type === 'Installment' || payment.type === 'BNPL') && payment.months) {
       payment.perMonthAmount = this.roundToTwo(payment.amount / payment.months);
@@ -50,26 +52,29 @@ export class CreditCardFormComponent {
     this.payments = this.paymentService.getPayments();
 
     this.newPayment = {
+      expenseType: 'card',
       cardName: '',
       dueDate: '15',
       type: 'Straight',
       amount: 0,
       startMonth: '',
+      description: ''
     };
   }
 
   private calculatePaymentDates(
+    expenseType: 'utility' | 'card',
     startMonthStr: string,
     due: '15' | '30',
     type: 'BNPL' | 'Straight' | 'Installment',
     months?: number,
-    delayMonths?: number
+    delayMonths?: number,
   ): { first: string; last: string } {
     const [year, month] = startMonthStr.split('-').map((v) => parseInt(v, 10));
 
     let firstDue: Date;
 
-    if (type === 'BNPL') {
+    if (expenseType == 'card' && type === 'BNPL') {
       const delay = delayMonths ?? 0;
       firstDue = new Date(year, month - 1 + delay, parseInt(due, 10));
     } else {
@@ -77,7 +82,11 @@ export class CreditCardFormComponent {
     }
 
     let lastDue = new Date(firstDue);
-    if ((type === 'Installment' || type === 'BNPL') && months && months > 1) {
+    if ((type === 'Installment' || type === 'BNPL') && (months && months > 1)) {
+      lastDue.setMonth(lastDue.getMonth() + (months - 1));
+    }
+
+    if(expenseType === 'utility' && months) {
       lastDue.setMonth(lastDue.getMonth() + (months - 1));
     }
 

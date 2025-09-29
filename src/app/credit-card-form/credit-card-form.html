@@ -1,82 +1,86 @@
 <h2>Add Credit Card Payment</h2>
 
 <form (ngSubmit)="addPayment()">
-  <label>
-    Card Name:
-    <input [(ngModel)]="newPayment.cardName" name="cardName" required />
-  </label>
-  <br />
 
-  <label>
-    Due Date:
-    <select [(ngModel)]="newPayment.dueDate" name="dueDate">
-      <option value="15">15th</option>
-      <option value="30">30th</option>
-    </select>
-  </label>
-  <br />
-
-  <label>
-    Amount:
-    <input
-      type="number"
-      [(ngModel)]="newPayment.amount"
-      name="amount"
-      step="0.01"
-      min="0"
-      required
-    />
-  </label>
-  <br />
-
-  <label>
-    Payment Type:
-    <select [(ngModel)]="newPayment.type" name="type">
-      <option value="BNPL">BNPL</option>
-      <option value="Straight">Straight</option>
-      <option value="Installment">Installment</option>
-    </select>
-  </label>
-  <br />
-
-  <div *ngIf="newPayment.type !== 'Straight'">
     <label>
-      Months:
-      <input
-        type="number"
-        [(ngModel)]="newPayment.months"
-        name="months"
-        min="1"
-        required
-      />
+        Expense Type
+        <select [(ngModel)]="newPayment.expenseType" name="dueDate">
+            <option value="card">Card</option>
+            <option value="utility">Utility</option>
+        </select>
     </label>
     <br />
-  </div>
 
-  <div *ngIf="newPayment.type === 'BNPL'">
     <label>
-      Delay (Months before first payment):
-      <input
-        type="number"
-        [(ngModel)]="newPayment.delayMonths"
-        name="delayMonths"
-        min="1"
-        required
-      />
+        Name:
+        <input [(ngModel)]="newPayment.cardName" name="cardName" required />
     </label>
     <br />
-  </div>
 
-  <label>
-    Start Month:
-    <input
-      type="month"
-      [(ngModel)]="newPayment.startMonth"
-      name="startMonth"
-      required
-    />
-  </label>
-  <br />
+    <label>
+        Due Date:
+        <select [(ngModel)]="newPayment.dueDate" name="dueDate">
+            <option value="15">15th</option>
+            <option value="30">30th</option>
+        </select>
+    </label>
+    <br />
 
-  <button type="submit">Add Payment</button>
+    <label>
+        Amount:
+        <input type="number" [(ngModel)]="newPayment.amount" name="amount" step="0.01" min="0" required />
+    </label>
+    <br />
+
+    <div *ngIf="newPayment.expenseType !== 'utility'">
+        <label>
+            Payment Type:
+            <select [(ngModel)]="newPayment.type" name="type">
+                <option value="BNPL">BNPL</option>
+                <option value="Straight">Straight</option>
+                <option value="Installment">Installment</option>
+            </select>
+        </label>
+        <br />
+
+        <div *ngIf="newPayment.type !== 'Straight'">
+            <label>
+                Months:
+                <input type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
+            </label>
+            <br />
+        </div>
+
+        <div *ngIf="newPayment.type === 'BNPL'">
+            <label>
+                Delay (Months before first payment):
+                <input type="number" [(ngModel)]="newPayment.delayMonths" name="delayMonths" min="1" required />
+            </label>
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="newPayment.expenseType === 'utility'">
+        <label>
+            How Many Months:
+            <input type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
+        </label>
+        <br />
+
+    </div>
+
+    <label>
+        Start Month:
+        <input type="month" [(ngModel)]="newPayment.startMonth" name="startMonth" required />
+    </label>
+
+    <br />
+
+    <label>
+        Description:
+        <input type="description" [(ngModel)]="newPayment.description" name="description" />
+    </label>
+    <br />
+
+    <button type="submit">Add Payment</button>
 </form>

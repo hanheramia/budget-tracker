@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { PaymentService, CreditCardPayment } from '../payment.service';
-import { GroupByCardPipe } from '../group-by-card.pipe';
 
 @Component({
   selector: 'payment-scheduled',
   standalone: true,
-  imports: [CommonModule, AsyncPipe, GroupByCardPipe],
+  imports: [CommonModule, AsyncPipe],
   templateUrl: './payment-scheduled.html'
 })
 export class PaymentScheduledComponent {

@@ -20,13 +20,18 @@
                     </span>
                     , per month: {{ p.perMonthAmount | number:'1.2-2' }})
                 </span>
-                <span *ngIf="p.type === 'Straight'">
+                <span *ngIf="p.type === 'Straight' && p.expenseType !== 'utility'">
                     (One-time payment: {{ p.perMonthAmount | number:'1.2-2' }})
                 </span>
+                <span *ngIf="p.expenseType === 'utility'">
+                    (Payment Until: {{ p.perMonthAmount | number:'1.2-2' }})
+                </span>
                 |
+                Every: {{p.dueDate}} |
                 Start Month: {{ p.startMonth }} |
                 First Payment: {{ p.firstPaymentDate }} |
-                Last Payment: {{ p.lastPaymentDate }}
+                Last Payment: {{ p.lastPaymentDate }} |
+                Description: {{p.description}}
                 <button type="button" (click)="removePayment(p)">Remove</button>
             </li>
         </ul>
