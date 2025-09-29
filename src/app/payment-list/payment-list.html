@@ -1,0 +1,39 @@
+<h2>Credit Card Payments</h2>
+
+
+<hr />
+
+<button type="button" (click)="clearAllPayments()">Clear All Payments</button>
+<!-- Detailed list grouped by card -->
+<div *ngIf="paymentService.payments$ | async as payments; else noPayments">
+    <h3>Detailed Payments List</h3>
+    <div *ngFor="let group of payments | groupByCard">
+        <h4>{{ group.cardName }}</h4>
+        <ul>
+            <li *ngFor="let p of group.entries">
+                Amount: {{ p.amount | number:'1.2-2' }} |
+                Type: {{ p.type }}
+                <span *ngIf="p.type !== 'Straight'">
+                    ({{ p.months }} months
+                    <span *ngIf="p.type === 'BNPL'">
+                        after {{ p.delayMonths }} month(s) delay
+                    </span>
+                    , per month: {{ p.perMonthAmount | number:'1.2-2' }})
+                </span>
+                <span *ngIf="p.type === 'Straight'">
+                    (One-time payment: {{ p.perMonthAmount | number:'1.2-2' }})
+                </span>
+                |
+                Start Month: {{ p.startMonth }} |
+                First Payment: {{ p.firstPaymentDate }} |
+                Last Payment: {{ p.lastPaymentDate }}
+                <button type="button" (click)="removePayment(p)">Remove</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<hr />
+
+<ng-template #noPayments>
+    <p>No payments saved yet.</p>
+</ng-template>

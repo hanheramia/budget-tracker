@@ -1,0 +1,62 @@
+<h2>Credit Card Scheduled</h2>
+<div>
+    <div *ngIf="paymentService.payments$ | async as payments; else noPayments">
+
+        <!-- Table for 15th -->
+        <h3>Payments Due on 15th</h3>
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Card Name</th>
+                    <th *ngFor="let month of getMonths(payments)">{{ month }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let card of getCardNamesByDueDate(payments, '15')">
+                    <td>{{ card }}</td>
+                    <td *ngFor="let month of getMonths(payments)">
+                        {{ getTotalForCardMonth(payments, card, month, '15') || '-' }}
+                    </td>
+                </tr>
+                <!-- Total per month row -->
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td *ngFor="let month of getMonths(payments)">
+                        <strong>{{ getMonthTotal(payments, month, '15') | number:'1.2-2' }}</strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Table for 30th -->
+        <h3>Payments Due on 30th</h3>
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Card Name</th>
+                    <th *ngFor="let month of getMonths(payments)">{{ month }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let card of getCardNamesByDueDate(payments, '30')">
+                    <td>{{ card }}</td>
+                    <td *ngFor="let month of getMonths(payments)">
+                        {{ getTotalForCardMonth(payments, card, month, '30') || '-' }}
+                    </td>
+                </tr>
+                <!-- Total per month row -->
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td *ngFor="let month of getMonths(payments)">
+                        <strong>{{ getMonthTotal(payments, month, '30') | number:'1.2-2' }}</strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <ng-template #noPayments>
+        <p>No payments saved yet.</p>
+    </ng-template>
+</div>
