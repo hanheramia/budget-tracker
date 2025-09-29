@@ -1,71 +1,94 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SalaryEntry, SalaryService } from '../services/salary.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { SalaryService, SalaryEntry } from '../services/salary.service';
+import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
   selector: 'salary-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCard,
+    MatCardContent
+  ],
   templateUrl: './salary.html',
+  styleUrls: ['./salary.css']
 })
 export class SalaryComponent {
-  newSalary: Partial<SalaryEntry> = {
+  newSalary: SalaryEntry & { startMonthDate?: Date } = {
+    type: 'Salary',
+    description: '',
     amount: 0,
     months: 1,
     startMonth: '',
     dueDate: '15',
-    type: 'Salary',
-    description: '',
+    perMonthAmount: 0
   };
+  
 
   constructor(public salaryService: SalaryService) {}
 
   addSalary() {
-    if (!this.newSalary.startMonth || !this.newSalary.amount || !this.newSalary.months) return;
+    const salary: SalaryEntry = { ...this.newSalary };
 
-    const perMonthAmount = this.newSalary.amount;
-
-    const salary: SalaryEntry = {
-      amount: this.newSalary.amount!,
-      months: this.newSalary.months!,
-      startMonth: this.newSalary.startMonth!,
-      perMonthAmount,
-      dueDate: this.newSalary.dueDate as '15' | '30',
-      type: this.newSalary.type as 'Salary' | 'Bonus',
-      description: this.newSalary.description || '',
-    };
+    // Calculate per-month amount
+    salary.perMonthAmount = salary.amount;
 
     this.salaryService.addSalary(salary);
 
     // Reset form
-    this.newSalary = { amount: 0, months: 1, startMonth: '', dueDate: '15', type: 'Salary', description: '' };
-  }
-
-  clearAll() {
-    if (confirm('Clear all salary entries?')) {
-      this.salaryService.clearSalaries();
-    }
+    this.newSalary = {
+      type: 'Salary',
+      description: '',
+      amount: 0,
+      months: 1,
+      startMonth: '',
+      dueDate: '15',
+      perMonthAmount: 0
+    };
   }
 
   removeSalary(salary: SalaryEntry) {
-    if (confirm('Remove this salary entry?')) {
-      this.salaryService.removeSalary(salary);
-    }
+    this.salaryService.removeSalary(salary);
   }
 
-  /** Generate array of months based on startMonth and months */
+  clearAll() {
+    this.salaryService.clearSalaries();
+  }
+
+  chosenMonthHandler(normalizedMonth: Date, datepicker: MatDatepicker<Date>) {
+    const month = normalizedMonth.getMonth() + 1;
+    const year = normalizedMonth.getFullYear();
+    this.newSalary.startMonth = `${year}-${month.toString().padStart(2, '0')}`;
+    this.newSalary.startMonthDate = normalizedMonth;
+    datepicker.close();
+  }
+
   getMonths(salary: SalaryEntry): string[] {
     const months: string[] = [];
-    let [year, month] = salary.startMonth.split('-').map(Number);
+    const [year, month] = salary.startMonth.split('-').map(v => parseInt(v, 10));
     for (let i = 0; i < salary.months; i++) {
-      months.push(`${year}-${month.toString().padStart(2, '0')}`);
-      month++;
-      if (month > 12) {
-        month = 1;
-        year++;
-      }
+      const d = new Date(year, month - 1 + i, parseInt(salary.dueDate, 10));
+      months.push(d.toISOString().split('T')[0]);
     }
     return months;
+  }
+
+  private roundToTwo(num: number): number {
+    return Math.round(num * 100) / 100;
   }
 }

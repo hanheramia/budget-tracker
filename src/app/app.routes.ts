@@ -5,6 +5,7 @@ import { PaymentScheduledComponent } from './payment-scheduled/payment-scheduled
 import { HelloComponent } from './hello/hello';
 import { SalaryComponent } from './salary/salary';
 import { SalarySummaryComponent } from './salary-summary/salary-summary';
+import { CashFlowComponent } from './cashflow-summary/cashflow-summary';
 
 export const routes: Routes = [
   { path: 'form', component: CreditCardFormComponent }, // form page
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: 'schedule', component: PaymentScheduledComponent },
   { path: 'salary-form', component: SalaryComponent}, 
   { path: 'salary-summary', component: SalarySummaryComponent},
+  { path: 'cashflow-summary', component: CashFlowComponent},
   { path: 'hello', component: HelloComponent },
   { path: '', redirectTo: 'form', pathMatch: 'full' }, // default route
 ];

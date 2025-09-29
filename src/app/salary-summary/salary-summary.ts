@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { SalaryEntry, SalaryService } from '../services/salary.service';
 
 @Component({
   selector: 'salary-summary',
   standalone: true,
-  imports: [CommonModule, AsyncPipe],
+  imports: [CommonModule],
   templateUrl: './salary-summary.html',
 })
 export class SalarySummaryComponent implements OnInit {

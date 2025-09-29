@@ -1,15 +1,33 @@
 import { Component } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { PaymentService, CreditCardPayment } from '../services/payment.service';
-import { GroupByCardPipe } from '../services/group-by-card.pipe';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'payment-list',
   standalone: true,
-  imports: [CommonModule, AsyncPipe, GroupByCardPipe],
-  templateUrl: './payment-list.html'
+  imports: [CommonModule, AsyncPipe, MatTableModule, MatButtonModule],
+  templateUrl: './payment-list.html',
+  styleUrls: ['./payment-list.css']
 })
 export class PaymentListComponent {
+  displayedColumns: string[] = [
+    'cardName',
+    'amount',
+    'type',
+    'months',
+    'delay',
+    'perMonth',
+    'dueDate',
+    'startMonth',
+    'firstPayment',
+    'lastPayment',
+    'description',
+    'actions'
+  ];
+
   constructor(public paymentService: PaymentService) {}
 
   clearAllPayments() {

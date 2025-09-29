@@ -1,86 +1,70 @@
-<h2>Add Credit Card Payment</h2>
+<h2>Add Credit Card / Utility Payment</h2>
 
-<form (ngSubmit)="addPayment()">
+<form (ngSubmit)="addPayment()" class="payment-form">
 
-    <label>
-        Expense Type
-        <select [(ngModel)]="newPayment.expenseType" name="dueDate">
-            <option value="card">Card</option>
-            <option value="utility">Utility</option>
-        </select>
-    </label>
-    <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Expense Type</mat-label>
+    <mat-select [(ngModel)]="newPayment.expenseType" name="expenseType">
+      <mat-option value="card">Card</mat-option>
+      <mat-option value="utility">Utility</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <label>
-        Name:
-        <input [(ngModel)]="newPayment.cardName" name="cardName" required />
-    </label>
-    <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="newPayment.cardName" name="cardName" required />
+  </mat-form-field>
 
-    <label>
-        Due Date:
-        <select [(ngModel)]="newPayment.dueDate" name="dueDate">
-            <option value="15">15th</option>
-            <option value="30">30th</option>
-        </select>
-    </label>
-    <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Due Date</mat-label>
+    <mat-select [(ngModel)]="newPayment.dueDate" name="dueDate">
+      <mat-option value="15">15th</mat-option>
+      <mat-option value="30">30th</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <label>
-        Amount:
-        <input type="number" [(ngModel)]="newPayment.amount" name="amount" step="0.01" min="0" required />
-    </label>
-    <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="newPayment.amount" name="amount" required min="0" step="0.01" />
+  </mat-form-field>
 
-    <div *ngIf="newPayment.expenseType !== 'utility'">
-        <label>
-            Payment Type:
-            <select [(ngModel)]="newPayment.type" name="type">
-                <option value="BNPL">BNPL</option>
-                <option value="Straight">Straight</option>
-                <option value="Installment">Installment</option>
-            </select>
-        </label>
-        <br />
+  <div *ngIf="newPayment.expenseType !== 'utility'">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Payment Type</mat-label>
+      <mat-select [(ngModel)]="newPayment.type" name="type">
+        <mat-option value="BNPL">BNPL</mat-option>
+        <mat-option value="Straight">Straight</mat-option>
+        <mat-option value="Installment">Installment</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <div *ngIf="newPayment.type !== 'Straight'">
-            <label>
-                Months:
-                <input type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
-            </label>
-            <br />
-        </div>
+    <mat-form-field *ngIf="newPayment.type !== 'Straight'" appearance="fill" class="full-width">
+      <mat-label>Months</mat-label>
+      <input matInput type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
+    </mat-form-field>
 
-        <div *ngIf="newPayment.type === 'BNPL'">
-            <label>
-                Delay (Months before first payment):
-                <input type="number" [(ngModel)]="newPayment.delayMonths" name="delayMonths" min="1" required />
-            </label>
-            <br />
-        </div>
-    </div>
+    <mat-form-field *ngIf="newPayment.type === 'BNPL'" appearance="fill" class="full-width">
+      <mat-label>Delay (Months before first payment)</mat-label>
+      <input matInput type="number" [(ngModel)]="newPayment.delayMonths" name="delayMonths" min="1" required />
+    </mat-form-field>
+  </div>
 
-    <div *ngIf="newPayment.expenseType === 'utility'">
-        <label>
-            How Many Months:
-            <input type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
-        </label>
-        <br />
+  <mat-form-field *ngIf="newPayment.expenseType === 'utility'" appearance="fill" class="full-width">
+    <mat-label>How Many Months</mat-label>
+    <input matInput type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
+  </mat-form-field>
 
-    </div>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Start Month</mat-label>
+    <input matInput [matDatepicker]="monthPicker" [(ngModel)]="newPayment.startMonthDate" name="startMonth" required readonly />
+    <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
+    <mat-datepicker #monthPicker startView="multi-year" (monthSelected)="chosenMonthHandler($event, monthPicker)"></mat-datepicker>
+  </mat-form-field>
 
-    <label>
-        Start Month:
-        <input type="month" [(ngModel)]="newPayment.startMonth" name="startMonth" required />
-    </label>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Description</mat-label>
+    <input matInput [(ngModel)]="newPayment.description" name="description" />
+  </mat-form-field>
 
-    <br />
-
-    <label>
-        Description:
-        <input type="description" [(ngModel)]="newPayment.description" name="description" />
-    </label>
-    <br />
-
-    <button type="submit">Add Payment</button>
+  <button mat-raised-button color="primary" type="submit">Add Payment</button>
 </form>

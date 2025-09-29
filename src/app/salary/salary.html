@@ -1,72 +1,73 @@
 <h2>Add Salary / Bonus</h2>
 
-<form (ngSubmit)="addSalary()">
-  <label>
-    Type:
-    <select [(ngModel)]="newSalary.type" name="type">
-      <option value="Salary">Salary</option>
-      <option value="Bonus">Bonus</option>
-    </select>
-  </label>
-  <br />
+<form (ngSubmit)="addSalary()" class="salary-form">
 
-  <label>
-    Description:
-    <input type="text" [(ngModel)]="newSalary.description" name="description" />
-  </label>
-  <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Type</mat-label>
+    <mat-select [(ngModel)]="newSalary.type" name="type">
+      <mat-option value="Salary">Salary</mat-option>
+      <mat-option value="Bonus">Bonus</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <label>
-    Amount:
-    <input type="number" [(ngModel)]="newSalary.amount" name="amount" step="0.01" required />
-  </label>
-  <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Description</mat-label>
+    <input matInput [(ngModel)]="newSalary.description" name="description" />
+  </mat-form-field>
 
-  <label>
-    Months:
-    <input type="number" [(ngModel)]="newSalary.months" name="months" min="1" required />
-  </label>
-  <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="newSalary.amount" name="amount" min="0" step="0.01" required />
+  </mat-form-field>
 
-  <label>
-    Start Month:
-    <input type="month" [(ngModel)]="newSalary.startMonth" name="startMonth" required />
-  </label>
-  <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Months</mat-label>
+    <input matInput type="number" [(ngModel)]="newSalary.months" name="months" min="1" required />
+  </mat-form-field>
 
-  <label>
-    Due Date:
-    <select [(ngModel)]="newSalary.dueDate" name="dueDate">
-      <option value="15">15th</option>
-      <option value="30">30th</option>
-    </select>
-  </label>
-  <br />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Start Month</mat-label>
+    <input matInput [matDatepicker]="monthPicker" [(ngModel)]="newSalary.startMonthDate" name="startMonth" required readonly />
+    <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
+    <mat-datepicker #monthPicker startView="multi-year" (monthSelected)="chosenMonthHandler($event, monthPicker)"></mat-datepicker>
+  </mat-form-field>
 
-  <button type="submit">Add</button>
-  <button type="button" (click)="clearAll()">Clear All</button>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Due Date</mat-label>
+    <mat-select [(ngModel)]="newSalary.dueDate" name="dueDate">
+      <mat-option value="15">15th</mat-option>
+      <mat-option value="30">30th</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="buttons">
+    <button mat-raised-button color="primary" type="submit">Add</button>
+    <button mat-raised-button color="warn" type="button" (click)="clearAll()">Clear All</button>
+  </div>
 </form>
 
 <hr />
 
 <h3>Salary Schedule</h3>
 <div *ngIf="salaryService.salaries$ | async as salaries; else noSalary">
-  <div *ngFor="let s of salaries">
-    <p>
-      Type: {{ s.type }} |
-      Description: {{ s.description }} |
-      Amount: {{ s.amount | number:'1.2-2' }} |
-      Months: {{ s.months }} |
-      Start Month: {{ s.startMonth }} |
-      Due Date: {{ s.dueDate }}
-      <button type="button" (click)="removeSalary(s)">Remove</button>
-    </p>
-    <ul>
-      <li *ngFor="let m of getMonths(s)">
-        {{ m }}: {{ s.perMonthAmount | number:'1.2-2' }}
-      </li>
-    </ul>
-  </div>
+  <mat-card *ngFor="let s of salaries" class="salary-card">
+    <mat-card-content>
+      <p>
+        <strong>{{ s.type }}</strong> |
+        {{ s.description }} |
+        Amount: {{ s.amount | number:'1.2-2' }} |
+        Months: {{ s.months }} |
+        Start Month: {{ s.startMonth }} |
+        Due Date: {{ s.dueDate }}
+        <button mat-mini-button color="warn" (click)="removeSalary(s)">Remove</button>
+      </p>
+      <ul>
+        <li *ngFor="let m of getMonths(s)">
+          {{ m }}: {{ s.perMonthAmount | number:'1.2-2' }}
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 <ng-template #noSalary>

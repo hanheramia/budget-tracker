@@ -2,23 +2,38 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService, CreditCardPayment } from '../services/payment.service';
-import { PaymentListComponent } from "../payment-list/payment-list";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-credit-card-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
   templateUrl: './credit-card-form.html',
-  styleUrls: ['./credit-card-form.css'],
+  styleUrls: ['./credit-card-form.css']
 })
 export class CreditCardFormComponent {
-  newPayment: CreditCardPayment = {
+  newPayment: CreditCardPayment & { startMonthDate?: Date } = {
     expenseType: 'card',
     cardName: '',
     dueDate: '15',
     type: 'Straight',
     amount: 0,
     startMonth: '',
+    description: ''
   };
 
   payments: CreditCardPayment[] = [];
@@ -51,6 +66,7 @@ export class CreditCardFormComponent {
     this.paymentService.addPayment(payment);
     this.payments = this.paymentService.getPayments();
 
+    // Reset form
     this.newPayment = {
       expenseType: 'card',
       cardName: '',
@@ -62,6 +78,15 @@ export class CreditCardFormComponent {
     };
   }
 
+  public chosenMonthHandler(normalizedMonth: Date, datepicker: MatDatepicker<Date>) {
+    const month = normalizedMonth.getMonth() + 1;
+    const year = normalizedMonth.getFullYear();
+
+    this.newPayment.startMonth = `${year}-${month.toString().padStart(2, '0')}`;
+    this.newPayment.startMonthDate = normalizedMonth;
+    datepicker.close();
+  }
+
   private calculatePaymentDates(
     expenseType: 'utility' | 'card',
     startMonthStr: string,
@@ -71,10 +96,9 @@ export class CreditCardFormComponent {
     delayMonths?: number,
   ): { first: string; last: string } {
     const [year, month] = startMonthStr.split('-').map((v) => parseInt(v, 10));
-
     let firstDue: Date;
 
-    if (expenseType == 'card' && type === 'BNPL') {
+    if (expenseType === 'card' && type === 'BNPL') {
       const delay = delayMonths ?? 0;
       firstDue = new Date(year, month - 1 + delay, parseInt(due, 10));
     } else {
@@ -86,7 +110,7 @@ export class CreditCardFormComponent {
       lastDue.setMonth(lastDue.getMonth() + (months - 1));
     }
 
-    if(expenseType === 'utility' && months) {
+    if (expenseType === 'utility' && months) {
       lastDue.setMonth(lastDue.getMonth() + (months - 1));
     }
 

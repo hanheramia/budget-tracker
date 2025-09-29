@@ -1,0 +1,37 @@
+/* Container for responsive table */
+.responsive-table {
+    width: 100%;
+    overflow-x: auto;  /* Allows horizontal scroll on small screens */
+    margin-top: 20px;
+    display: block;
+  }
+  
+  /* Minimum table width ensures all columns show on desktop */
+  table {
+    min-width: 900px;  
+    width: 100%;
+  }
+  
+  /* Optional: striped rows for readability */
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Optional: hover effect */
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Button spacing */
+  button {
+    margin-top: 5px;
+  }
+  
+  /* Reduce padding on very small screens */
+  @media (max-width: 600px) {
+    th, td {
+      padding: 8px 4px;
+      font-size: 12px;
+    }
+  }
+  

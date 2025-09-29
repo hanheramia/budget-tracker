@@ -1,4 +1,4 @@
-.payment-form {
+.salary-form {
     max-width: 600px;
     margin: auto;
     display: flex;
@@ -8,5 +8,15 @@
   
   .full-width {
     width: 100%;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .salary-card {
+    margin-bottom: 16px;
+    padding: 8px;
   }
   

@@ -1,41 +1,91 @@
-<h2>Credit Card Payments</h2>
+<h2>Credit Card / Utility Payments</h2>
 
-<button type="button" (click)="clearAllPayments()">Clear All Payments</button>
-<!-- Detailed list grouped by card -->
+<button mat-raised-button color="warn" type="button" (click)="clearAllPayments()">Clear All Payments</button>
+
 <div *ngIf="paymentService.payments$ | async as payments; else noPayments">
-    <h3>Detailed Payments List</h3>
-    <div *ngFor="let group of payments | groupByCard">
-        <h4>{{ group.cardName }}</h4>
-        <ul>
-            <li *ngFor="let p of group.entries">
-                Amount: {{ p.amount | number:'1.2-2' }} |
-                Type: {{ p.type }}
-                <span *ngIf="p.type !== 'Straight'">
-                    ({{ p.months }} months
-                    <span *ngIf="p.type === 'BNPL'">
-                        after {{ p.delayMonths }} month(s) delay
-                    </span>
-                    , per month: {{ p.perMonthAmount | number:'1.2-2' }})
-                </span>
-                <span *ngIf="p.type === 'Straight' && p.expenseType !== 'utility'">
-                    (One-time payment: {{ p.perMonthAmount | number:'1.2-2' }})
-                </span>
-                <span *ngIf="p.expenseType === 'utility'">
-                    (Payment Until: {{ p.perMonthAmount | number:'1.2-2' }})
-                </span>
-                |
-                Every: {{p.dueDate}} |
-                Start Month: {{ p.startMonth }} |
-                First Payment: {{ p.firstPaymentDate }} |
-                Last Payment: {{ p.lastPaymentDate }} |
-                Description: {{p.description}}
-                <button type="button" (click)="removePayment(p)">Remove</button>
-            </li>
-        </ul>
-    </div>
+  <h3>Detailed Payments List</h3>
+
+  <table mat-table [dataSource]="payments" class="mat-elevation-z8 responsive-table">
+
+    <!-- Card Name -->
+    <ng-container matColumnDef="cardName">
+      <th mat-header-cell *matHeaderCellDef> Card Name </th>
+      <td mat-cell *matCellDef="let p"> {{ p.cardName }} </td>
+    </ng-container>
+
+    <!-- Amount -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let p"> {{ p.amount | number:'1.2-2' }} </td>
+    </ng-container>
+
+    <!-- Type -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef> Type </th>
+      <td mat-cell *matCellDef="let p"> {{ p.type }} </td>
+    </ng-container>
+
+    <!-- Months -->
+    <ng-container matColumnDef="months">
+      <th mat-header-cell *matHeaderCellDef> Months </th>
+      <td mat-cell *matCellDef="let p"> {{ p.months || '-' }} </td>
+    </ng-container>
+
+    <!-- Delay -->
+    <ng-container matColumnDef="delay">
+      <th mat-header-cell *matHeaderCellDef> Delay </th>
+      <td mat-cell *matCellDef="let p"> {{ p.delayMonths || '-' }} </td>
+    </ng-container>
+
+    <!-- Per Month -->
+    <ng-container matColumnDef="perMonth">
+      <th mat-header-cell *matHeaderCellDef> Per Month </th>
+      <td mat-cell *matCellDef="let p"> {{ p.perMonthAmount | number:'1.2-2' }} </td>
+    </ng-container>
+
+    <!-- Due Date -->
+    <ng-container matColumnDef="dueDate">
+      <th mat-header-cell *matHeaderCellDef> Due </th>
+      <td mat-cell *matCellDef="let p"> {{p.dueDate}} </td>
+    </ng-container>
+
+    <!-- Start Month -->
+    <ng-container matColumnDef="startMonth">
+      <th mat-header-cell *matHeaderCellDef> Start Month </th>
+      <td mat-cell *matCellDef="let p"> {{ p.startMonth }} </td>
+    </ng-container>
+
+    <!-- First Payment -->
+    <ng-container matColumnDef="firstPayment">
+      <th mat-header-cell *matHeaderCellDef> First Payment </th>
+      <td mat-cell *matCellDef="let p"> {{ p.firstPaymentDate }} </td>
+    </ng-container>
+
+    <!-- Last Payment -->
+    <ng-container matColumnDef="lastPayment">
+      <th mat-header-cell *matHeaderCellDef> Last Payment </th>
+      <td mat-cell *matCellDef="let p"> {{ p.lastPaymentDate }} </td>
+    </ng-container>
+
+    <!-- Description -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let p"> {{ p.description }} </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-button color="warn" (click)="removePayment(p)">Remove</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
 </div>
-<hr />
 
 <ng-template #noPayments>
-    <p>No payments saved yet.</p>
+  <p>No payments saved yet.</p>
 </ng-template>

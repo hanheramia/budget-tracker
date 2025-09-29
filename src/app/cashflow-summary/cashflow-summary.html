@@ -1,0 +1,67 @@
+<h3>Net Cash Flow - Payments Due on 15th</h3>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th *ngFor="let month of months">{{ month }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Salary / Bonus</td>
+      <td *ngFor="let month of months">
+        {{
+          getSalaryMonthTotal(month, '15') ? (getSalaryMonthTotal(month, '15') | number:'1.2-2') : '-'
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td>Credit Card Payments</td>
+      <td *ngFor="let month of months">
+        {{
+          getCreditMonthTotal(month, '15') ? (getCreditMonthTotal(month, '15') | number:'1.2-2') : '-'
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Net Cash Flow</strong></td>
+      <td *ngFor="let month of months">
+        <strong>{{ getNetMonth(month, '15') | number:'1.2-2' }}</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Net Cash Flow - Payments Due on 30th</h3>
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th *ngFor="let month of months">{{ month }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Salary / Bonus</td>
+      <td *ngFor="let month of months">
+        {{
+          getSalaryMonthTotal(month, '30') ? (getSalaryMonthTotal(month, '30') | number:'1.2-2') : '-'
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td>Credit Card Payments</td>
+      <td *ngFor="let month of months">
+        {{
+          getCreditMonthTotal(month, '30') ? (getCreditMonthTotal(month, '30') | number:'1.2-2') : '-'
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Net Cash Flow</strong></td>
+      <td *ngFor="let month of months">
+        <strong>{{ getNetMonth(month, '30') | number:'1.2-2' }}</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
