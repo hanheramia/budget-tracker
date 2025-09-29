@@ -1,8 +1,5 @@
 <h2>Credit Card Payments</h2>
 
-
-<hr />
-
 <button type="button" (click)="clearAllPayments()">Clear All Payments</button>
 <!-- Detailed list grouped by card -->
 <div *ngIf="paymentService.payments$ | async as payments; else noPayments">
