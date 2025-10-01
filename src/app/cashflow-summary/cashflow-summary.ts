@@ -1,18 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
 import { CreditCardPayment, PaymentService } from '../services/payment.service';
 import { SalaryEntry, SalaryService } from '../services/salary.service';
 
 @Component({
   selector: 'cashflow-summary',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './cashflow-summary.html',
+  imports: [CommonModule, MatTableModule],
+  templateUrl: './cashflow-summary.html'
 })
 export class CashFlowComponent implements OnInit {
   creditPayments: CreditCardPayment[] = [];
   salaries: SalaryEntry[] = [];
   months: string[] = [];
+
+  displayedColumns15: string[] = [];
+  displayedColumns30: string[] = [];
 
   constructor(
     private paymentService: PaymentService,
@@ -30,7 +34,6 @@ export class CashFlowComponent implements OnInit {
     });
   }
 
-  /** Combine all months from salary and credit card payments */
   private updateMonths() {
     const monthSet = new Set<string>();
 
@@ -39,10 +42,7 @@ export class CashFlowComponent implements OnInit {
       for (let i = 0; i < s.months; i++) {
         monthSet.add(`${year}-${month.toString().padStart(2, '0')}`);
         month++;
-        if (month > 12) {
-          month = 1;
-          year++;
-        }
+        if (month > 12) { month = 1; year++; }
       }
     });
 
@@ -53,24 +53,22 @@ export class CashFlowComponent implements OnInit {
       for (let i = 0; i < monthsCount; i++) {
         monthSet.add(`${year}-${month.toString().padStart(2, '0')}`);
         month++;
-        if (month > 12) {
-          month = 1;
-          year++;
-        }
+        if (month > 12) { month = 1; year++; }
       }
     });
 
     this.months = Array.from(monthSet).sort();
+
+    // Columns: first column + all months
+    this.displayedColumns15 = ['category', ...this.months];
+    this.displayedColumns30 = ['category', ...this.months];
   }
 
-  /** Sum salary/bonus for month and dueDate */
+  /** Salary totals */
   getSalaryMonthTotal(month: string, dueDate: '15' | '30'): number {
     return this.salaries
       .filter((s) => s.dueDate === dueDate)
-      .map((s) => {
-        const months = this.getSalaryMonths(s);
-        return months.includes(month) ? s.perMonthAmount : 0;
-      })
+      .map((s) => this.getSalaryMonths(s).includes(month) ? s.perMonthAmount : 0)
       .reduce((a, b) => a + b, 0);
   }
 
@@ -85,14 +83,11 @@ export class CashFlowComponent implements OnInit {
     return months;
   }
 
-  /** Sum credit card payments for month and dueDate */
+  /** Credit totals */
   getCreditMonthTotal(month: string, dueDate: '15' | '30'): number {
     return this.creditPayments
       .filter((c) => c.dueDate === dueDate)
-      .map((c) => {
-        const months = this.getCreditMonths(c);
-        return months.includes(month) ? c.perMonthAmount ?? 0 : 0;
-      })
+      .map((c) => this.getCreditMonths(c).includes(month) ? c.perMonthAmount ?? 0 : 0)
       .reduce((a, b) => a + b, 0);
   }
 
@@ -109,7 +104,7 @@ export class CashFlowComponent implements OnInit {
     return months;
   }
 
-  /** Net Cash Flow = salary - credit card payments */
+  /** Net cash flow */
   getNetMonth(month: string, dueDate: '15' | '30'): number {
     return this.getSalaryMonthTotal(month, dueDate) - this.getCreditMonthTotal(month, dueDate);
   }

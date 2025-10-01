@@ -1,0 +1,32 @@
+:host ::ng-deep .scroll-wrapper {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 4px;
+  background: #fff;
+}
+
+:host ::ng-deep .wide-table {
+  width: max-content !important;
+  min-width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .sticky-col {
+  position: sticky;
+  left: 0;
+  background: #2f1515;
+  z-index: 2;
+  box-shadow: 2px 0 4px -2px rgba(0,0,0,0.25);
+}
+
+:host ::ng-deep .sticky-col.mat-header-cell {
+  z-index: 3;
+}
+
+div {
+  background-color: aqua !important
+}

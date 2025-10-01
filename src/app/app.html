@@ -1,14 +1,13 @@
-<h1>Credit Card Tracker</h1>
+<h1>Expenses Tracker</h1>
 
-<nav class="tabs">
-  <button [routerLink]="'/form'" routerLinkActive="active">Add Payment</button>
-  <button [routerLink]="'/list'" routerLinkActive="active">View Payments</button>
-  <button [routerLink]="'/schedule'" routerLinkActive="active">View Schedule Payments</button>
-  <button [routerLink]="'/salary-form'" routerLinkActive="active">Salary Form</button>
-  <button [routerLink]="'/salary-summary'" routerLink="active">Salary Summary</button>
-  <button [routerLink]="'/cashflow-summary'" routerLink="active">Cash Flow Summary</button>
-  <button [routerLink]="'/hello'" routerLinkActive="active">Hello</button>
-</nav>
+<mat-tab-group
+  [(selectedIndex)]="selectedIndex"
+  (selectedIndexChange)="onTabChange($event)"
+  class="page-tabs"
+>
+  <mat-tab *ngFor="let tab of tabs" [label]="tab.label"></mat-tab>
+</mat-tab-group>
 
-<hr />
-<router-outlet />
+<div class="page-container">
+  <router-outlet></router-outlet>
+</div>
