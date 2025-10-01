@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SalaryService, SalaryEntry } from '../services/salary.service';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatTable, MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'salary-form',
@@ -22,8 +23,10 @@ import { MatCard, MatCardContent } from '@angular/material/card';
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCard,
-    MatCardContent
+    MatTableModule,
+    MatTable,
+    MatButtonModule,
+    MatButton
   ],
   templateUrl: './salary.html',
   styleUrls: ['./salary.css']
@@ -38,8 +41,17 @@ export class SalaryComponent {
     dueDate: '15',
     perMonthAmount: 0
   };
-  
 
+  displayedColumns: string[] = [
+    'type',
+    'description',
+    'amount',
+    'months',
+    'startMonth',
+    'dueDate',
+    'actions'
+  ];
+  
   constructor(public salaryService: SalaryService) {}
 
   addSalary() {

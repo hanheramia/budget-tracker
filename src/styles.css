@@ -19,7 +19,7 @@ body {
   padding: 8px;
   margin-bottom: 24px;
   background-color: #fff;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* Scroll container */

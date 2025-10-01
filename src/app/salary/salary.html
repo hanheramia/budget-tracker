@@ -50,25 +50,66 @@
 
 <h3>Salary Schedule</h3>
 <div *ngIf="salaryService.salaries$ | async as salaries; else noSalary">
-  <mat-card *ngFor="let s of salaries" class="salary-card">
-    <mat-card-content>
-      <p>
-        <strong>{{ s.type }}</strong> |
-        {{ s.description }} |
-        Amount: {{ s.amount | number:'1.2-2' }} |
-        Months: {{ s.months }} |
-        Start Month: {{ s.startMonth }} |
-        Due Date: {{ s.dueDate }}
-        <button mat-mini-button color="warn" (click)="removeSalary(s)">Remove</button>
-      </p>
-      <ul>
-        <li *ngFor="let m of getMonths(s)">
-          {{ m }}: {{ s.perMonthAmount | number:'1.2-2' }}
-        </li>
-      </ul>
-    </mat-card-content>
-  </mat-card>
+  <div class="table-wrapper">
+    <div class="table-scroll-container">
+      <table mat-table [dataSource]="salaries" class="mat-elevation-z8 table-fixed">
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let s"> {{ s.type }} </td>
+        </ng-container>
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let s"> {{ s.description }} </td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> Amount </th>
+          <td mat-cell *matCellDef="let s"> {{ s.amount | number:'1.2-2' }} </td>
+        </ng-container>
+
+        <!-- Months Column -->
+        <ng-container matColumnDef="months">
+          <th mat-header-cell *matHeaderCellDef> Months </th>
+          <td mat-cell *matCellDef="let s"> {{ s.months }} </td>
+        </ng-container>
+
+        <!-- Start Month Column -->
+        <ng-container matColumnDef="startMonth">
+          <th mat-header-cell *matHeaderCellDef> Start Month </th>
+          <td mat-cell *matCellDef="let s"> {{ s.startMonth }} </td>
+        </ng-container>
+
+        <!-- Due Date Column -->
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef> Due Date </th>
+          <td mat-cell *matCellDef="let s"> {{ s.dueDate }} </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let s">
+            <button mat-mini-button color="warn" (click)="removeSalary(s)">Remove</button>
+          </td>
+        </ng-container>
+        
+        <!-- Header / Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
 </div>
+
+<ng-template #noSalary>
+  <p>No salary records found.</p>
+</ng-template>
+
 
 <ng-template #noSalary>
   <p>No salary or bonus entries yet.</p>
