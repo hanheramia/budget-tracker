@@ -10,8 +10,19 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Name</mat-label>
+  <!-- If Card: Select from saved cards -->
+  <mat-form-field *ngIf="newPayment.expenseType === 'card'" appearance="fill" class="full-width">
+    <mat-label>Select Card</mat-label>
+    <mat-select [(ngModel)]="newPayment.cardName" name="cardName" required>
+      <mat-option *ngFor="let card of cards" [value]="card.cardName">
+        {{ card.cardName }} ({{ card.type }} ••••{{ card.last4 }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- If Utility: free text name -->
+  <mat-form-field *ngIf="newPayment.expenseType === 'utility'" appearance="fill" class="full-width">
+    <mat-label>Utility Name</mat-label>
     <input matInput [(ngModel)]="newPayment.cardName" name="cardName" required />
   </mat-form-field>
 
@@ -40,18 +51,18 @@
 
     <mat-form-field *ngIf="newPayment.type !== 'Straight'" appearance="fill" class="full-width">
       <mat-label>Months</mat-label>
-      <input matInput type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
+      <input matInput type="number" [(ngModel)]="newPayment.months" name="months" min="1" />
     </mat-form-field>
 
     <mat-form-field *ngIf="newPayment.type === 'BNPL'" appearance="fill" class="full-width">
       <mat-label>Delay (Months before first payment)</mat-label>
-      <input matInput type="number" [(ngModel)]="newPayment.delayMonths" name="delayMonths" min="1" required />
+      <input matInput type="number" [(ngModel)]="newPayment.delayMonths" name="delayMonths" min="1" />
     </mat-form-field>
   </div>
 
   <mat-form-field *ngIf="newPayment.expenseType === 'utility'" appearance="fill" class="full-width">
     <mat-label>How Many Months</mat-label>
-    <input matInput type="number" [(ngModel)]="newPayment.months" name="months" min="1" required />
+    <input matInput type="number" [(ngModel)]="newPayment.months" name="months" min="1" />
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="full-width">

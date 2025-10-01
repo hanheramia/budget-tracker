@@ -1,0 +1,49 @@
+<h2>Manage Credit Cards</h2>
+
+<form (ngSubmit)="addCard()">
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Card Name</mat-label>
+    <input matInput [(ngModel)]="newCard.cardName" name="cardName" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Card Type</mat-label>
+    <mat-select [(ngModel)]="newCard.type" name="type" required>
+      <mat-option value="Visa">Visa</mat-option>
+      <mat-option value="Mastercard">Mastercard</mat-option>
+      <mat-option value="Amex">Amex</mat-option>
+      <mat-option value="Other">Other</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Last 4 Digits</mat-label>
+    <input matInput maxlength="4" [(ngModel)]="newCard.last4" name="last4" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Due Date</mat-label>
+    <mat-select [(ngModel)]="newCard.dueDate" name="dueDate" required>
+      <mat-option value="15">15th</mat-option>
+      <mat-option value="30">30th</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Cutoff Date</mat-label>
+    <input matInput type="number" [(ngModel)]="newCard.cutoff" name="cutoff" min="1" max="31" required />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Add Card</button>
+</form>
+
+<hr />
+
+<h3>Saved Cards</h3>
+<div *ngFor="let c of cards" class="card-item">
+  <p>
+    <strong>{{ c.cardName }}</strong> ({{ c.type }}, ••••{{ c.last4 }})  
+    | Due: {{ c.dueDate }} | Cutoff: {{ c.cutoff }}
+    <button mat-mini-button color="warn" (click)="removeCard(c.id)">Remove</button>
+  </p>
+</div>

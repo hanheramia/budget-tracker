@@ -6,8 +6,10 @@ import { HelloComponent } from './hello/hello';
 import { SalaryComponent } from './salary/salary';
 import { SalarySummaryComponent } from './salary-summary/salary-summary';
 import { CashFlowComponent } from './cashflow-summary/cashflow-summary';
+import { AddCardComponent } from './add-card/add-card';
 
 export const routes: Routes = [
+  { path: 'add-card', component: AddCardComponent },
   { path: 'form', component: CreditCardFormComponent }, // form page
   { path: 'list', component: PaymentListComponent }, // payment list page
   { path: 'schedule', component: PaymentScheduledComponent },

@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaymentService, CreditCardPayment } from '../services/payment.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+
+import { PaymentService, CreditCardPayment } from '../services/payment.service';
+import { CardService, CardDetail } from '../services/card.service';
 
 @Component({
   selector: 'app-credit-card-form',
@@ -37,13 +39,25 @@ export class CreditCardFormComponent {
   };
 
   payments: CreditCardPayment[] = [];
+  cards: CardDetail[] = [];
 
-  constructor(private paymentService: PaymentService) {
+  constructor(
+    private paymentService: PaymentService,
+    private cardService: CardService
+  ) {
     this.payments = this.paymentService.getPayments();
+    this.cards = this.cardService.getCards();
   }
 
   addPayment() {
     const payment: CreditCardPayment = { ...this.newPayment };
+
+    // Convert Date object → YYYY-MM string
+    if (this.newPayment.startMonthDate) {
+      const year = this.newPayment.startMonthDate.getFullYear();
+      const month = this.newPayment.startMonthDate.getMonth() + 1;
+      payment.startMonth = `${year}-${month.toString().padStart(2, '0')}`;
+    }
 
     const { first, last } = this.calculatePaymentDates(
       payment.expenseType,

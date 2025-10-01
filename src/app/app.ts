@@ -14,6 +14,7 @@ export class App {
   protected readonly title = signal('budget-tracker');
 
   tabs = [
+    { label: 'Add Card', route: '/add-card' },
     { label: 'Add Payment', route: '/form' },
     { label: 'View Payments', route: '/list' },
     { label: 'Scheduled Payments', route: '/schedule' },
