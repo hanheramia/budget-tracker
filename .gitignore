@@ -1,43 +1,65 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ========================================================
+# Global ignores
+# ========================================================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# ========================================================
+# Frontend: Angular (fe)
+# ========================================================
+fe/node_modules/
+fe/dist/
+fe/tmp/
+fe/out-tsc/
+fe/.angular/cache/
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Angular CLI misc
+fe/npm-debug.log*
+fe/yarn-error.log*
+fe/pnpm-debug.log*
 
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+# Angular-specific caches
+fe/.sass-cache/
+fe/testem.log
+fe/__screenshots__/
 
-# Visual Studio Code
-.vscode/*
+# ========================================================
+# Backend: Spring Boot (be)
+# ========================================================
+# Maven outputs
+be/target/
+be/.mvn/
+
+# Maven wrapper files (optional but safe)
+be/mvnw
+be/mvnw.cmd
+
+# Gradle output (if ever used)
+be/.gradle/
+be/build/
+
+# IDE-specific metadata
+be/*.iml
+be/.idea/
+be/.classpath
+be/.project
+be/.settings/
+
+# ========================================================
+# IDE/editor global workspace files
+# ========================================================
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
+# ========================================================
 # Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-__screenshots__/
+# ========================================================
+*.swp
+*.swo
+.history/
 
-# System files
-.DS_Store
-Thumbs.db
