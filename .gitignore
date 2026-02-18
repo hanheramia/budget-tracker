@@ -7,9 +7,9 @@
 /bazel-out
 
 # Node
-/node_modules
-npm-debug.log
-yarn-error.log
+budget-tracker-fe/node_modules
+budget-tracker-fe/npm-debug.log
+budget-tracker-fe/yarn-error.log
 
 # IDEs and editors
 .idea/
